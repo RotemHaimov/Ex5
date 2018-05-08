@@ -1,0 +1,42 @@
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        background-color: #2196F3;
+        padding: 10px;
+    }
+
+    .grid-item {
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .grid-title {
+        padding: 10px;
+        font-size: 35px;
+        text-align: center;
+    }
+</style>
+
+<h1>Flowers Catalog</h1>
+<br>
+
+<div class="grid-container">
+    <div class="grid-title">Flower Name</div>
+    <div class="grid-title">Color</div>
+    <div class="grid-title">Price</div>
+    <% Flowers.forEach(function(flower) { %>
+        <div class="grid-item">
+            <%= flower.name %>
+        </div>
+        <div class="grid-item">
+            <%= flower.color %>
+        </div>
+        <div class="grid-item">
+            <%= flower.price %>
+        </div>
+        <% }); %>
+</div>

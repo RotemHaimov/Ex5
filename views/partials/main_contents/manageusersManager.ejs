@@ -1,0 +1,129 @@
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: auto auto;
+        background-color: #2196F3;
+        padding: 10px;
+    }
+
+    .grid-item {
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .grid-title {
+        padding: 10px;
+        font-size: 35px;
+        text-align: center;
+    }
+
+    .showHide {
+        display: none;
+    }
+    /* Style The Dropdown Button */
+
+    .dropbtn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+    /* The container <div> - needed to position the dropdown content */
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    /* Dropdown Content (Hidden by Default) */
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+    /* Links inside the dropdown */
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+    /* Change color of dropdown links on hover */
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1
+    }
+    /* Show the dropdown menu on hover */
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    /* Change the background color of the dropdown button when the dropdown content is shown */
+
+    .dropdown:hover .dropbtn {
+        background-color: #3e8e41;
+    }
+</style>
+
+<script>
+    function addCustomer() {
+        /*$.post("/addCustomer", {
+            userToAdd: $('#customerName').val(),
+            user: userName
+        }, function (data, status) {
+            if (status != "success") return;
+            $('#page_content').html(data);
+        });*/
+        document.getElementById('customerForm').style.display = "block";
+    }
+</script>
+
+<h1>Manage Users</h1>
+<br>
+
+<div class="grid-container">
+    <div class="grid-title">Username</div>
+    <div class="grid-title">Password</div>
+    <% Users.forEach(function(user) { %>
+        <div class="grid-item">
+            <%= user.name %>
+        </div>
+        <div class="grid-item">
+            <%= user.username %>
+        </div>
+
+        <% }); %>
+</div>
+<div>
+    Choose What to Add:
+    <!--<input id="123" type="button" value="Submit" onclick="addCustomer()"><br>-->
+
+</div>
+<div class="dropdown">
+    <button class="dropbtn">Choose:</button>
+    <div class="dropdown-content">
+        <a href="#">Add User</a>
+        <a href="#">Delete User</a>
+        <a href="#">Update User</a>
+    </div>
+    <br><br><br><br><br><br>
+</div>
+
+<div id="customerForm" class="showHide">
+    <!--<form method="post" action="/addCustomer">-->
+    Customer Name:
+    <br>
+    <input type="text" id="customerName">
+    <br>
+    <input type="button" value="Submit" onclick="addCustomer()">
+    <!--</form>-->
+</div>

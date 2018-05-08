@@ -1,0 +1,118 @@
+<script>
+    var userName, passWord;
+    $('document').ready(function () {
+        $('#loginBtn').click(function () {
+            $.post("/login", {
+                    username: $('#uname').val(),
+                    password: $('#psw').val()
+                },
+                function (data, status) {
+                    userName = $('#uname').val();
+                    passWord = $('#psw').val();
+                    document.getElementById('id01').style.display = 'none';
+                    changePage(data, status);
+                });
+        });
+    });
+
+    function changePage(data, status) {
+        if (data != "manager" && data != "worker") { //username not found
+            alert("Incorrect Username or Password!");
+        } else { //manager or worker
+            turnLogintoLogout();
+            addElementToNavbar("addAfterLogin", "Catalog");
+            addElementToNavbar("addAfterLogin", "Manage Users");
+            if (data == "manager") {
+                addElementToNavbar("addAfterLogin", "Manage Branches");
+            }
+        }
+    }
+
+    function turnLogintoLogout() { //change text and onClick
+        document.getElementById("login_li").outerHTML =
+            '<a href="#" id="login_li" onclick="turnLogoutToLogin()"><span class="glyphicon glyphicon-log-in"></span> Logout</a>';
+    }
+
+    function turnLogoutToLogin() { //change text and onClick and remove {catalog, manageusers, managebranches }
+        document.getElementById("login_li").outerHTML =
+            '<a href="#" id="login_li" onclick="showLogin()"><span class="glyphicon glyphicon-log-in"></span> Login</a>';
+        $('#Catalog_li').remove();
+        $('#ManageUsers_li').remove();
+        $('#ManageBranches_li').remove();
+    }
+
+    function addElementToNavbar(navID, li_name) {
+        var li_id, onClick;
+        if (li_name == "Manage Users") li_id = "ManageUsers";
+        else if (li_name == "Manage Branches") li_id = "ManageBranches";
+        else li_id = li_name;
+
+        var toAppend = '<li' + ' id="' + li_id + '_li" onclick="sendJQuerryAjax(\'' + li_id + '\');"><a href="#">' +
+            li_name +
+            '</a></li>';
+        $("#" + navID).append(toAppend);
+    }
+
+    function showLogin() {
+        document.getElementById('id01').style.display = 'block';
+    }
+
+    function sendJQuerryAjax(li_name) {
+        $.post("/" + li_name, {
+            user: userName
+        }, function (data, status) {
+            if (status != "success") return;
+            //alert(data);
+            $('#page_content').html(data);
+        });
+    }
+</script>
+
+<div id="id01" class="modal">
+
+    <!-- <form class="modal-content animate" action="/login" method="post"> -->
+    <div class="modal-content animate">
+
+
+        <div class="imgcontainer">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+            <!-- <img src="img_avatar2.png" alt="Avatar" class="avatar"> -->
+        </div>
+
+        <div class="container">
+            <label>
+                <b>Username</b>
+            </label>
+            <input type="text" placeholder="Enter Username" id="uname" name="uname" required>
+            <br>
+
+            <label>
+                <b>Password</b>
+            </label>
+            <input type="password" placeholder="Enter Password" id="psw" name="psw" required>
+            <br>
+
+            <button type="submit" id="loginBtn">Login</button>
+            <br>
+            <input type="checkbox" checked="checked"> Remember me
+        </div>
+
+        <div class="container2" style="background-color:#f1f1f1">
+            <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+
+        </div>
+    </div>
+    <!--</form> -->
+</div>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById('id01');
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>

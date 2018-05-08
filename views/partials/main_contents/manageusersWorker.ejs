@@ -1,0 +1,61 @@
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: auto auto;
+        background-color: #2196F3;
+        padding: 10px;
+    }
+
+    .grid-item {
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .grid-title {
+        padding: 10px;
+        font-size: 35px;
+        text-align: center;
+    }
+</style>
+
+<script>
+    function addCustomer()
+    {
+        $.post("/addCustomer", {
+            userToAdd: $('#customerName').val(),
+            user: userName
+        }, function (data, status) {
+            if (status != "success") return;
+            $('#page_content').html(data);
+        });
+    }
+</script>
+
+<h1>Manage Users</h1>
+<br>
+
+<div class="grid-container">
+    <div class="grid-title">Username</div>
+    <div class="grid-title">Password</div>
+    <% Users.forEach(function(user) { %>
+        <div class="grid-item">
+            <%= user.name %>
+        </div>
+        <div class="grid-item">
+            <%= user.username %>
+        </div>
+        
+        <% }); %>
+</div>
+<div>
+    <!--<form method="post" action="/addCustomer">-->
+    Customer Name:
+    <br>
+    <input type="text" id="customerName">
+    <br>
+    <input type="button" value="Submit" onclick="addCustomer()">
+    <!--</form>-->
+</div>

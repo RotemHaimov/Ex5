@@ -1,0 +1,50 @@
+<style>
+    .grid-container {
+        display: grid;
+        grid-template-columns: auto auto auto auto auto;
+        background-color: #2196F3;
+        padding: 10px;
+    }
+
+    .grid-item {
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .grid-title {
+        padding: 10px;
+        font-size: 35px;
+        text-align: center;
+    }
+</style>
+
+<h1>Manage Branches</h1>
+<br>
+
+<div class="grid-container">
+    <div class="grid-title">Branch Name</div>
+    <div class="grid-title">Active</div>
+    <div class="grid-title">Address</div>
+    <div class="grid-title">Phone</div>
+    <div class="grid-title">ID</div>
+    <% Branches.forEach(function(branch) { %>
+        <div class="grid-item">
+            <%= branch.name %>
+        </div>
+        <div class="grid-item">
+            <%= branch.active %>
+        </div>
+        <div class="grid-item">
+            <%= branch.address %>
+        </div>
+        <div class="grid-item">
+            <%= branch.phone %>
+        </div>
+        <div class="grid-item">
+            <%= branch.id %>
+        </div>
+        <% }); %>
+</div>
