@@ -28,6 +28,22 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+var User = require("./models/user");
+var Branch = require("./models/branch");
+var Flower = require("./models/flower");
+
+// create more users
+User({
+	cathegory: 'manager',
+	name: 'Dani Zilberstein',
+	username: 'a',
+	password: 'a',
+	branchID: -1
+  }).save(function(err) {
+	if (err) throw err;
+	console.log('User created!');
+  });
+
 router.post('/login', function(req,res) {
 	var userName = req.body.username;
 	var pass = req.body.password;
