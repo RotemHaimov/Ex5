@@ -43,7 +43,15 @@ User({
 	if (err) throw err;
 	console.log('User created!');
   });
-
+  Flower({
+	name: 'Kalanit',
+	color: 'red',
+	picture: 'images/Kalanit.jpg',
+	price: 100
+  }).save(function(err) {
+	if (err) throw err;
+	console.log('Flower created!');
+  });
 router.post('/login', function(req,res) {
 	var userName = req.body.username;
 	var pass = req.body.password;
