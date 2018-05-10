@@ -35,14 +35,28 @@ var Flower = require("./models/flower");
 // create more users
 User({
 	cathegory: 'manager',
-	name: 'Dani Zilberstein',
-	username: 'a',
-	password: 'a',
+	name: 'Rotem Haimov',
+	username: 'r',
+	password: 'r',
 	branchID: -1
   }).save(function(err) {
 	if (err) throw err;
 	console.log('User created!');
   });
+
+  // create more branches
+  Branch({
+	name: 'Rami Levi',
+	active: 1,
+	address: 'Talpiot',
+	phone: '987654321',
+	branchID: -1
+  }).save(function(err) {
+	if (err) throw err;
+	console.log('Branch created!');
+  });
+
+ 
 
 router.post('/login', function(req,res) {
 	var userName = req.body.username;
