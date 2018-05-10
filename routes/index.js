@@ -22,7 +22,7 @@ var flowers=[
 	{name: 'Sahlav' , color: 'white', picture: 'pics/Sahlav.jpg', price: 58},
 	{name: 'Vered' , color: 'pink', picture: 'pics/Vered.jpg', price: 77},
 ];
-
+//
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
