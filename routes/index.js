@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var debug = require('debug')('ex5:index');
 
 var branches=[
 	{name: 'Branch1', active:true,  address: 'Keren Hayesod 16', phone:'0547875785', id:1},
@@ -31,54 +32,16 @@ router.get('/', function(req, res, next) {
 var User = require("./models/user");
 var Branch = require("./models/branch");
 var Flower = require("./models/flower");
+//var fillDB=require('./models/fillDataBases')();
 
-// create more users
-User({
-	cathegory: 'manager',
-	name: 'Rotem Haimov',
-	username: 'r',
-	password: 'r',
-	branchID: -1
-  }).save(function(err) {
-	if (err) throw err;
-	console.log('User created!');
-  });
-  Flower({
-	name: 'Kalanit',
-	color: 'red',
-	picture: 'images/Kalanit.jpg',
-	price: 100
-  }).save(function(err) {
-	if (err) throw err;
-	console.log('Flower created!');
-  });
-
-  // create more branches
-  Branch({
-	name: 'Rami Levi',
-	active: 1,
-	address: 'Talpiot',
-	phone: '987654321',
-	branchID: -1
-  }).save(function(err) {
-	if (err) throw err;
-	console.log('Branch created!');
-  });
-
- 
-
-router.post('/login', function(req,res) {
+router.post('/login', async function(req,res) {
 	var userName = req.body.username;
 	var pass = req.body.password;
 	var answer="";
-	users.forEach(element => {
-		if(element.username==userName && element.password==pass)
-		{
-			answer = element.cathegory;
-		}
-	});
+	user=await User.findOne({username: req.body.username, password: req.body.password}).exec();
+	debug("username: "+userName+"\n password: "+pass);
+	if(user!=null) answer=user.cathegory;
 	res.send(answer);
-	console.log(answer);
 });
 
 router.post('/About', function(req,res) {
@@ -91,41 +54,54 @@ router.post('/Contact', function(req,res) {
 	res.render('partials/main_contents/contact.ejs');
 });
 
-router.post('/Catalog', function(req,res) {
+router.post('/Catalog', async function(req,res) {
 	console.log("catalog, "+req.body.user+".");
-	res.render('partials/main_contents/catalog.ejs', {Flowers: flowers});
+	var flowers=await Flower.find().exec();
+	//debug("flowers: \n"+flowers);
+	res.render('partials/main_contents/catalog.ejs', {Flowers: /*Flower.find().exec()*/flowers});
 });
 
-router.post('/ManageUsers', function(req,res) {
+router.post('/ManageUsers', async function(req,res) {
 	console.log("manage users, "+req.body.user+".");
-	users.forEach(function(user){
-		if(user.username==req.body.user)
-		{
-			if(user.cathegory=="manager") res.render('partials/main_contents/manageusersManager.ejs', {Users: users});
-			else if(user.cathegory=="worker") res.render('partials/main_contents/manageusersWorker.ejs', {Users: users});
-		}
-	});
+	var users=await User.find().exec();
+	var user=await User.findOne({username: req.body.user}).exec();
+	//debug("\nuser:\n"+user);
+	if(user!=null)
+	{
+		if(user.cathegory=="manager") res.render('partials/main_contents/manageusersManager.ejs', {Users: users});
+		else if(user.cathegory=="worker") res.render('partials/main_contents/manageusersWorker.ejs', {Users: users});
+	}
+	else res.render();
 });
 
-router.post('/ManageBranches', function(req,res) {
+router.post('/ManageBranches', async function(req,res) {
 	console.log("manage branches, "+req.body.user+".");
+	var user=await User.findOne({username: req.body.user}).exec();
+	var branches= null;
+	if(user.cathegory=="manager")
+		branches= await Branch.find().exec();
 	res.render('partials/main_contents/managebranches.ejs', {Branches: branches});
 });
 
-router.post('/addCustomer', function(req,res) {
-	
+router.post('/addCustomer', async function(req,res) {
 	var userToAdd=req.body.userToAdd;
-	var username=req.body.user;
-	users.push({cathegory: "customer", name: userToAdd});
-	//console.log("toAdd: "+userToAdd+" user: "+user);
-	users.forEach(function(user){
-		//console.log(user);
-		if(user.username==username)
-		{
-			if(user.cathegory=="manager") res.render('partials/main_contents/manageusersManager.ejs', {Users: users});
-			else if(user.cathegory=="worker") res.render('partials/main_contents/manageusersWorker.ejs', {Users: users});
-		}
+	var users=await User.find().exec();
+	var user=await User.findOne({username: req.body.user}).exec();
+	debug(user);
+	if(user==null) return;
+	User({
+		cathegory: 'customer',
+		name: userToAdd,
+		username: '-1',
+		password: '-1',
+		branchID: -1
+	}).save(function(err) {
+		if (err) throw err;
+		debug('Customer Added!');
 	});
+
+	if(user.cathegory=="manager") res.render('partials/main_contents/manageusersManager.ejs', {Users: users});
+	else if(user.cathegory=="worker") res.render('partials/main_contents/manageusersWorker.ejs', {Users: users});
 });
 
 module.exports = router;
