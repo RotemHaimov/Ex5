@@ -113,13 +113,14 @@ router.post('/upload', function(req, res) {
    
 	// The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
 	let sampleFile = req.files.sampleFile;
-   
+	let fileName=sampleFile.name;
 	// Use the mv() method to place the file somewhere on your server
-	sampleFile.mv('uploads/filename.jpg', function(err) {
+	sampleFile.mv('uploads/'+fileName, function(err) {
 	  if (err)
 		return res.status(500).send(err);
    
-	  res.send('File uploaded!');
+	  //res.send('File uploaded!');
+	  res.redirect('/');
 	});
   });
   
